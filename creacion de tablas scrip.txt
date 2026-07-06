@@ -1,0 +1,52 @@
+-- 1. Crear tabla de Ciudades
+CREATE TABLE riwi_cities (
+    riwi_city_id SERIAL PRIMARY KEY,
+    riwi_city_name VARCHAR(100) NOT NULL UNIQUE
+);
+
+-- 2. Crear tabla de Categorías
+CREATE TABLE riwi_categories (
+    riwi_category_id SERIAL PRIMARY KEY,
+    riwi_category_name VARCHAR(100) NOT NULL UNIQUE
+);
+
+-- 3. Crear tabla de Proveedores (Relacionada con Ciudades)
+CREATE TABLE riwi_suppliers (
+    riwi_supplier_id SERIAL PRIMARY KEY,
+    riwi_supplier_name VARCHAR(150) NOT NULL,
+    riwi_city_id INT NOT NULL REFERENCES riwi_cities(riwi_city_id) ON DELETE RESTRICT
+);
+
+-- 4. Crear tabla de Bodegas (Relacionada con Ciudades)
+CREATE TABLE riwi_warehouses (
+    riwi_warehouse_id SERIAL PRIMARY KEY,
+    riwi_warehouse_name VARCHAR(150) NOT NULL,
+    riwi_city_id INT NOT NULL REFERENCES riwi_cities(riwi_city_id) ON DELETE RESTRICT
+);
+
+-- 5. Crear tabla de Productos (Relacionada con Categorías)
+CREATE TABLE riwi_products (
+    riwi_product_id SERIAL PRIMARY KEY,
+    riwi_product_name VARCHAR(150) NOT NULL,
+    riwi_category_id INT NOT NULL REFERENCES riwi_categories(riwi_category_id) ON DELETE RESTRICT
+);
+
+-- 6. Crear tabla de Órdenes de Compra / Tipos de Movimiento
+CREATE TABLE riwi_purchase_orders (
+    riwi_order_id SERIAL PRIMARY KEY,
+    riwi_purchase_order_code VARCHAR(50) NOT NULL UNIQUE,
+    riwi_movement_type VARCHAR(10) NOT NULL CHECK (riwi_movement_type IN ('IN', 'OUT'))
+);
+
+-- 7. Crear Tabla de Hechos: Movimientos de Inventario
+CREATE TABLE riwi_inventory_movements (
+    riwi_movement_id SERIAL PRIMARY KEY,
+    riwi_movement_date TIMESTAMP NOT NULL,
+    riwi_supplier_id INT REFERENCES riwi_suppliers(riwi_supplier_id) ON DELETE SET NULL,
+    riwi_warehouse_id INT NOT NULL REFERENCES riwi_warehouses(riwi_warehouse_id) ON DELETE CASCADE,
+    riwi_product_id INT NOT NULL REFERENCES riwi_products(riwi_product_id) ON DELETE CASCADE,
+    riwi_order_id INT NOT NULL REFERENCES riwi_purchase_orders(riwi_order_id) ON DELETE CASCADE,
+    riwi_quantity INT NOT NULL CHECK (riwi_quantity >= 0),
+    riwi_unit_price DECIMAL(12, 2) NOT NULL CHECK (riwi_unit_price >= 0)
+);
+

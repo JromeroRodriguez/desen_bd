@@ -1,0 +1,18 @@
+
+--actualizar manipualcion dml
+UPDATE riwi_suppliers
+SET riwi_supplier_name = 'Industrial Tools Q&A S.A.S.'
+WHERE riwi_supplier_name = 'Industrial Tools Q&A';
+SELECT * FROM riwi_suppliers;
+
+--eliminar
+
+DELETE FROM riwi_products
+WHERE riwi_product_id = (
+    SELECT p.riwi_product_id 
+    FROM riwi_products p
+    LEFT JOIN riwi_inventory_movements m ON p.riwi_product_id = m.riwi_product_id
+    WHERE m.riwi_movement_id IS NULL
+    LIMIT 1
+);
+SELECT * FROM riwi_products;
