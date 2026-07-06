@@ -25,8 +25,4 @@ All entities use the mandatory `riwi_` prefix and are strictly named in English:
 1. Open pgAdmin 4 and create a database named `bd_[your_name]_[your_lastname]_[your_clan]`.
 2. Open the Query Tool and execute the DDL script in order (Independent tables first, transaction tables last).
 
-## Developer Information
-- **Full Name:** [Your Name]
-- **Clan:** [Your Clan Name]
-- **Repository URL:** [Your GitHub Link]
 
